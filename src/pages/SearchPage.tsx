@@ -8,14 +8,11 @@ import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 export function SearchPage() {
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [searchQuery, setSearchQuery] = useState("");
-  const [clickCount, setClickCount] = useState(0);
-
   const allProfiles = extractProfiles(platform);
   const filtered = filterProfiles(allProfiles, searchQuery);
 
   const handleProfileClick = (username: string) => {
-    setClickCount(clickCount + 1);
-    console.log("Clicked profile:", username, "total clicks:", clickCount);
+    console.log("Clicked profile:", username);
   };
 
   return (

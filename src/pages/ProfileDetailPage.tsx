@@ -72,6 +72,7 @@ export function ProfileDetailPage() {
         <img
           src={user.picture}
           className="w-24 h-24 rounded-full border"
+          alt={`${user.fullname} profile picture`}
         />
         <div className="flex-1">
           <h2 className="text-xl font-bold">
@@ -140,6 +141,7 @@ export function ProfileDetailPage() {
             <a
               href={user.url}
               target="_blank"
+              rel="noopener noreferrer"
               className="inline-block mt-4 text-blue-600 text-sm"
             >
               View on platform →
