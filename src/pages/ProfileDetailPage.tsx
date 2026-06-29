@@ -85,10 +85,8 @@ export function ProfileDetailPage() {
         </Button>
 
         <Card className="overflow-hidden">
-          <div className="h-32 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent w-full" />
-          
-          <CardContent className="px-6 sm:px-10 pb-10 relative">
-            <div className="flex flex-col sm:flex-row gap-6 sm:items-end -mt-16 mb-8">
+          <CardContent className="px-6 sm:px-10 pt-8 pb-10 relative">
+            <div className="flex flex-col sm:flex-row gap-6 sm:items-end mb-8">
               <Avatar className="h-32 w-32 border-4 border-background shadow-lg">
                 <AvatarImage src={user.picture} alt={user.fullname} />
                 <AvatarFallback className="text-4xl">{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
