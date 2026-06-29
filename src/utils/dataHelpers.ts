@@ -15,7 +15,15 @@ export function getSearchData(platform: Platform): SearchData {
 
 export function extractProfiles(platform: Platform): UserProfileSummary[] {
   const data = getSearchData(platform);
-  return data.accounts.map((item) => item.account.user_profile);
+  return data.accounts.map((item) => {
+    const p = item.account.user_profile;
+    // Normalize data: some APIs (like YouTube) might omit 'username' but have 'handle'
+    return {
+      ...p,
+      username: p.username || p.handle || p.custom_name || p.user_id || "unknown",
+      fullname: p.fullname || p.username || p.handle || "Unknown",
+    };
+  });
 }
 
 export function filterProfiles(
@@ -23,8 +31,8 @@ export function filterProfiles(
   query: string
 ): UserProfileSummary[] {
   if (!query) return profiles;
+  const lowerQuery = query.toLowerCase();
   return profiles.filter((p) => {
-    const lowerQuery = query.toLowerCase();
     const matchUsername = p.username.toLowerCase().includes(lowerQuery);
     const matchFullname = p.fullname.toLowerCase().includes(lowerQuery);
     return matchUsername || matchFullname;

@@ -7,6 +7,11 @@ import { formatEngagementRate } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
 import { useToggleList } from "@/hooks/useToggleList";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, ExternalLink, Users, Heart, MessageCircle, Activity } from "lucide-react";
 
 function formatFollowersDetail(count: number) {
   if (count >= 1000000) return (count / 1000000).toFixed(2) + "M";
@@ -49,7 +54,7 @@ export function ProfileDetailPage() {
   if (!loaded) {
     return (
       <Layout title={`@${username}`}>
-        <p className="text-gray-400">Loading...</p>
+        <p className="text-muted-foreground">Loading profile...</p>
       </Layout>
     );
   }
@@ -57,12 +62,12 @@ export function ProfileDetailPage() {
   if (!profileData) {
     return (
       <Layout title={`@${username}`}>
-        <p className="text-red-600 mb-4">
+        <p className="text-destructive mb-4">
           Could not load profile details for {username}
         </p>
-        <Link to="/" className="text-blue-600 underline">
-          Back to search
-        </Link>
+        <Button variant="outline" asChild>
+          <Link to="/">Back to search</Link>
+        </Button>
       </Layout>
     );
   }
@@ -70,99 +75,106 @@ export function ProfileDetailPage() {
   const user: FullUserProfile = profileData.data.user_profile;
 
   return (
-    <Layout title={user.fullname}>
-      <Link to="/" className="text-sm text-blue-600 mb-4 inline-block">
-        ← Back to search
-      </Link>
+    <Layout>
+      <div className="max-w-3xl mx-auto">
+        <Button variant="ghost" asChild className="mb-6 -ml-4 text-muted-foreground hover:text-foreground">
+          <Link to="/">
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Search
+          </Link>
+        </Button>
 
-      <div className="flex gap-6 items-start text-left max-w-2xl mx-auto">
-        <img
-          src={user.picture}
-          className="w-24 h-24 rounded-full border"
-          alt={`${user.fullname} profile picture`}
-        />
-        <div className="flex-1">
-          <h2 className="text-xl font-bold">
-            @{user.username}
-            <VerifiedBadge verified={user.is_verified} />
-          </h2>
-          <p className="text-gray-600">{user.fullname}</p>
-          <p className="text-xs text-gray-400 mt-1">Platform: {platform}</p>
+        <Card className="overflow-hidden">
+          <div className="h-32 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent w-full" />
+          
+          <CardContent className="px-6 sm:px-10 pb-10 relative">
+            <div className="flex flex-col sm:flex-row gap-6 sm:items-end -mt-16 mb-8">
+              <Avatar className="h-32 w-32 border-4 border-background shadow-lg">
+                <AvatarImage src={user.picture} alt={user.fullname} />
+                <AvatarFallback className="text-4xl">{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+              </Avatar>
+              
+              <div className="flex-1 pb-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <h1 className="text-2xl font-bold tracking-tight">{user.fullname}</h1>
+                  <Badge variant="secondary" className="capitalize">{platform}</Badge>
+                </div>
+                <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                  @{user.username}
+                  <VerifiedBadge verified={user.is_verified} />
+                </div>
+              </div>
 
-          {user.description && (
-            <p className="mt-3 text-sm text-gray-700">{user.description}</p>
-          )}
-
-          <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-            <div className="border p-2 rounded">
-              <div className="text-gray-500">Followers</div>
-              <div className="font-semibold">
-                {formatFollowersDetail(user.followers)}
+              <div className="pb-2">
+                <Button
+                  variant={isInList(user.user_id) ? "outline" : "default"}
+                  size="lg"
+                  onClick={() => toggleList(user, platform)}
+                  className="w-full sm:w-auto"
+                >
+                  {isInList(user.user_id) ? "Added ✓" : "Add to List"}
+                </Button>
               </div>
             </div>
-            <div className="border p-2 rounded">
-              <div className="text-gray-500">Engagement Rate</div>
-              <div className="font-semibold">
-                {formatEngagementRate(user.engagement_rate)}
+
+            <Separator className="my-8" />
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
+                  <Users className="h-4 w-4" />
+                  <span className="text-sm font-medium">Followers</span>
+                </div>
+                <p className="text-2xl font-bold">{formatFollowersDetail(user.followers)}</p>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
+                  <Heart className="h-4 w-4" />
+                  <span className="text-sm font-medium">Likes</span>
+                </div>
+                <p className="text-2xl font-bold">{formatFollowersDetail(user.avg_likes || 0)}</p>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
+                  <MessageCircle className="h-4 w-4" />
+                  <span className="text-sm font-medium">Comments</span>
+                </div>
+                <p className="text-2xl font-bold">{formatFollowersDetail(user.avg_comments || 0)}</p>
+              </div>
+              
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-2 text-muted-foreground mb-2">
+                  <Activity className="h-4 w-4" />
+                  <span className="text-sm font-medium">Engagement</span>
+                </div>
+                <p className="text-2xl font-bold text-primary">
+                  {formatEngagementRate(user.engagement_rate)}
+                </p>
               </div>
             </div>
-            {user.posts_count !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Posts</div>
-                <div className="font-semibold">{user.posts_count}</div>
-              </div>
-            )}
-            {user.avg_likes !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Avg Likes</div>
-                <div className="font-semibold">
-                  {formatFollowersDetail(user.avg_likes)}
-                </div>
-              </div>
-            )}
-            {user.avg_comments !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Avg Comments</div>
-                <div className="font-semibold">{user.avg_comments}</div>
-              </div>
-            )}
-            {user.avg_views !== undefined && user.avg_views > 0 && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Avg Views</div>
-                <div className="font-semibold">
-                  {formatFollowersDetail(user.avg_views)}
-                </div>
-              </div>
-            )}
-            {user.engagements !== undefined && (
-              <div className="border p-2 rounded">
-                <div className="text-gray-500">Engagements</div>
-                <div className="font-semibold">
-                  {formatFollowersDetail(user.engagements)}
-                </div>
-              </div>
-            )}
-          </div>
 
-          {user.url && (
-            <a
-              href={user.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block mt-4 text-blue-600 text-sm"
-            >
-              View on platform →
-            </a>
-          )}
+            <Separator className="my-8" />
 
-          <Button
-            variant={isInList(user.user_id) ? "outline" : "default"}
-            className="mt-4"
-            onClick={() => toggleList(user, platform)}
-          >
-            {isInList(user.user_id) ? "Added ✓" : "Add to List"}
-          </Button>
-        </div>
+            <div className="space-y-4">
+              <h3 className="font-semibold text-lg">About</h3>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {user.description || "No bio available."}
+              </p>
+              
+            </div>
+            
+            {user.url && (
+              <Button variant="outline" asChild className="mt-8 w-full sm:w-auto">
+                <a href={user.url} target="_blank" rel="noopener noreferrer">
+                  View Profile on {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                  <ExternalLink className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </Layout>
   );
