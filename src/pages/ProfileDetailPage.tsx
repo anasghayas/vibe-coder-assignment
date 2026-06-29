@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { VerifiedBadge } from "@/components/VerifiedBadge";
-import type { FullUserProfile, ProfileDetailResponse } from "@/types";
+import type { FullUserProfile, Platform, ProfileDetailResponse } from "@/types";
 import { formatEngagementRate } from "@/utils/formatters";
 import { loadProfileByUsername } from "@/utils/profileLoader";
+import { useToggleList } from "@/hooks/useToggleList";
+import { Button } from "@/components/ui/button";
 
 function formatFollowersDetail(count: number) {
   if (count >= 1000000) return (count / 1000000).toFixed(2) + "M";
@@ -15,7 +17,12 @@ function formatFollowersDetail(count: number) {
 export function ProfileDetailPage() {
   const { username } = useParams<{ username: string }>();
   const [searchParams] = useSearchParams();
-  const platform = searchParams.get("platform") || "unknown";
+  const platformParam = searchParams.get("platform");
+  const platform: Platform =
+    platformParam === "youtube" || platformParam === "tiktok"
+      ? platformParam
+      : "instagram";
+  const { toggleList, isInList } = useToggleList();
   const [profileData, setProfileData] = useState<ProfileDetailResponse | null>(
     null
   );
@@ -148,14 +155,13 @@ export function ProfileDetailPage() {
             </a>
           )}
 
-          {/* TODO: candidates must implement Add to List feature */}
-          {/* TODO: candidates must implement Add to List feature */}
-          <button
-            disabled
-            className="block mt-4 px-4 py-2 bg-gray-300 text-gray-500 rounded cursor-not-allowed"
+          <Button
+            variant={isInList(user.user_id) ? "outline" : "default"}
+            className="mt-4"
+            onClick={() => toggleList(user, platform)}
           >
-            Add to List
-          </button>
+            {isInList(user.user_id) ? "Added ✓" : "Add to List"}
+          </Button>
         </div>
       </div>
     </Layout>

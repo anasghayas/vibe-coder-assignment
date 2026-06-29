@@ -8,12 +8,9 @@ import { extractProfiles, filterProfiles } from "@/utils/dataHelpers";
 export function SearchPage() {
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [searchQuery, setSearchQuery] = useState("");
+
   const allProfiles = extractProfiles(platform);
   const filtered = filterProfiles(allProfiles, searchQuery);
-
-  const handleProfileClick = (username: string) => {
-    console.log("Clicked profile:", username);
-  };
 
   return (
     <Layout title="Find Influencers">
@@ -35,12 +32,8 @@ export function SearchPage() {
         Showing {filtered.length} of {allProfiles.length} on {platform}
       </p>
 
-      <ProfileList
-        profiles={filtered}
-        platform={platform}
-        searchQuery={searchQuery}
-        onProfileClick={handleProfileClick}
-      />
+      <ProfileList profiles={filtered} platform={platform} />
     </Layout>
   );
 }
+
