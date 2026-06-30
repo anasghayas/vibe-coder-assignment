@@ -1,5 +1,8 @@
 # Wobb Frontend Assignment
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/influencersearch.netlify.app/deploy-status)](https://influencersearch.netlify.app/)
+**Live Demo:** [https://influencersearch.netlify.app/](https://influencersearch.netlify.app/)
+
 An influencer search and discovery application built with React, TypeScript, Vite, and Tailwind CSS v4. This project started as a rough starter template with intentional bugs and quality issues — the submission below documents every fix, design decision, and improvement made.
 
 ---
