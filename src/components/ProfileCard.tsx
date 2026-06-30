@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Platform, UserProfileSummary } from "@/types";
 import { VerifiedBadge } from "./VerifiedBadge";
@@ -12,7 +13,7 @@ interface ProfileCardProps {
   platform: Platform;
 }
 
-export function ProfileCard({ profile, platform }: ProfileCardProps) {
+export const ProfileCard = memo(function ProfileCard({ profile, platform }: ProfileCardProps) {
   const navigate = useNavigate();
   const { toggleList, isInList } = useToggleList();
   const inList = isInList(profile.user_id);
@@ -57,4 +58,4 @@ export function ProfileCard({ profile, platform }: ProfileCardProps) {
       </CardContent>
     </Card>
   );
-}
+});

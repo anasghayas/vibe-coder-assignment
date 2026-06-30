@@ -31,7 +31,7 @@ export function Layout({ children, title }: LayoutProps) {
         
         <main className="container max-w-screen-xl mx-auto px-4 md:px-8 py-8 flex-1">
           {title && (
-            <div className="mb-8">
+            <div>
               <h1 className="text-3xl font-bold tracking-tight drop-shadow-sm">{title}</h1>
             </div>
           )}
