@@ -21,7 +21,7 @@ export const AuroraBackground = ({
         )}
         {...props}
       >
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div
             //   I'm sorry but this is what happens when you leave developers in charge of the UI
             //   wow color, much aesthetic
@@ -34,11 +34,11 @@ export const AuroraBackground = ({
             dark:[background-image:var(--dark-gradient),var(--aurora)]
             [background-size:300%,_200%]
             [background-position:50%_50%,50%_50%]
-            filter blur-[10px] invert dark:invert-0
+            filter md:blur-[10px] invert dark:invert-0
             after:content-[""] after:absolute after:inset-0 after:[background-image:var(--white-gradient),var(--aurora)] 
             after:dark:[background-image:var(--dark-gradient),var(--aurora)]
             after:[background-size:200%,_100%] 
-            after:animate-aurora after:[background-attachment:fixed] after:mix-blend-difference
+            md:after:animate-aurora md:after:mix-blend-difference
             pointer-events-none
             absolute -inset-[10px] opacity-50 will-change-transform`,
               showRadialGradient &&
